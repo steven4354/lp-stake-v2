@@ -1,5 +1,7 @@
 # lp-stake-v2
 
+stake lp tokens and earn erc20 tokens as reward!
+
 ## setup 
 
 ### for local hardhat blockchain
