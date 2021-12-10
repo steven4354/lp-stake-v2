@@ -4,9 +4,10 @@
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 
-// TODO: change this to a ts file
+const MOCK_TOKEN_MINT_AMT = 10000
+const DEFAULT_DECIMALS = 18
+
 async function main() {
-  // @ts-ignore
   const [deployer, governance] = await hre.ethers.getSigners();
 
   const network = await ethers.provider.getNetwork();
@@ -15,20 +16,14 @@ async function main() {
 
   console.log("Deploying contracts with the account:", deployer.address);
 
-  // const Greeter = await hre.ethers.getContractFactory("Greeter");
-  // const greeter = await Greeter.deploy("Hello, World!");
-
-  // const Token = await hre.ethers.getContractFactory("Token");
-  // const token = await Token.deploy();
-
   const Reward = await hre.ethers.getContractFactory("ERC20Mock");
-  const reward = await Reward.deploy("Test Token", "TEST", 18, 10000);
+  const reward = await Reward.deploy("Test Token", "TEST", DEFAULT_DECIMALS, MOCK_TOKEN_MINT_AMT);
 
   const Farm = await hre.ethers.getContractFactory("Farm");
   const farm = await Farm.deploy(reward.address);
 
   const LP = await hre.ethers.getContractFactory("LPMock");
-  const lp = await LP.deploy("LP Mock Token", "LP-X-Y", 18);
+  const lp = await LP.deploy("LP Mock Token", "LP-X-Y", DEFAULT_DECIMALS);
 
   await reward.deployed();
   await farm.deployed();
