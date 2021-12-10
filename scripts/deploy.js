@@ -25,13 +25,18 @@ async function main() {
   const reward = await Reward.deploy("Test Token", "TEST", 18, 10000);
 
   const Farm = await hre.ethers.getContractFactory("Farm");
-  const farm = await Farm.deploy(reward.address)
+  const farm = await Farm.deploy(reward.address);
+
+  const LP = await hre.ethers.getContractFactory("LPMock");
+  const lp = await LP.deploy("LP Mock Token", "LP-X-Y", 18);
 
   await reward.deployed();
   await farm.deployed();
+  await lp.deployed();
 
   console.log("Reward deployed to:", reward.address);
-  console.log("Farm deployed to:", farm.address)
+  console.log("Farm deployed to:", farm.address);
+  console.log("LP deployed to:", lp.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
