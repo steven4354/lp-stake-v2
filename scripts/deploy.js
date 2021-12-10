@@ -24,14 +24,14 @@ async function main() {
   const Reward = await hre.ethers.getContractFactory("ERC20Mock");
   const reward = await Reward.deploy("Test Token", "TEST", 18, 10000);
 
-  // const StakingPools = await hre.ethers.getContractFactory("StakingPools");
-  // const stakingPools = await StakingPools.deploy(reward.address, governance.getAddress())
+  const Farm = await hre.ethers.getContractFactory("Farm");
+  const farm = await Farm.deploy(reward.address)
 
   await reward.deployed();
-  // await stakingPools.deployed();
+  await farm.deployed();
 
   console.log("Reward deployed to:", reward.address);
-  // console.log("Staking pools deployed to:", stakingPools.address)
+  console.log("Farm deployed to:", farm.address)
 }
 
 // We recommend this pattern to be able to use async/await everywhere
