@@ -1,2 +1,10 @@
 # lp-stake-v2
- reward lp stakers with token contract
+
+## setup
+
+start up hardhat local blockchain
+
+```
+npx hardhat node 
+```
+
