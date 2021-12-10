@@ -5,7 +5,7 @@ import "solidity-coverage";
 
 require('dotenv').config()
 
-const BSC_TESTNET_MNEMOMIC = process.env.BSC_TESTNET_MNEMOMIC;
+const EVM_WALLET_TESTNET_MNEMOMIC = process.env.EVM_WALLET_TESTNET_MNEMOMIC;
 
 export default {
   networks: {
@@ -24,9 +24,18 @@ export default {
       gasPrice: 20000000000,
       timeout: 30000,
       accounts: {
-        mnemonic: BSC_TESTNET_MNEMOMIC,
+        mnemonic: EVM_WALLET_TESTNET_MNEMOMIC,
       },
     },
+    testnetAurora: {
+      url: "https://testnet.aurora.dev",
+      chainId: 1313161555,
+      gasPrice: 20000000000,
+      timeout: 30000,
+      accounts: {
+        mnemonic: EVM_WALLET_TESTNET_MNEMOMIC,
+      },
+    }
   },
   solidity: {
     version: "0.6.12",
