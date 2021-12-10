@@ -22,7 +22,7 @@ async function main() {
   // const token = await Token.deploy();
 
   const Reward = await hre.ethers.getContractFactory("ERC20Mock");
-  const reward = await Reward.deploy("Test Token", "TEST", 18);
+  const reward = await Reward.deploy("Test Token", "TEST", 18, 10000);
 
   // const StakingPools = await hre.ethers.getContractFactory("StakingPools");
   // const stakingPools = await StakingPools.deploy(reward.address, governance.getAddress())
