@@ -35,3 +35,13 @@ deploy the contracts to local blockchain
 ```
 npx hardhat run scripts/deploy.js --network testnetAurora
 ```
+
+## smart contracts testing
+
+to run tests use: 
+
+```
+npm run test
+```
+
+the tests are located in the /test folder
