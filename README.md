@@ -56,7 +56,11 @@ npm run test
 
 the tests are located in the /test folder
 
-## Notes
+## notes
 
 trisolaris LP tokens: 
 https://github.com/trisolaris-labs/trisolaris_core/blob/main/contracts/amm/UniswapV2ERC20.sol
+
+```
+npx hardhat run scripts/addPool.ts --network mainnetAurora
+```
