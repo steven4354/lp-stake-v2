@@ -2,6 +2,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@nomiclabs/hardhat-ethers";
 import "hardhat-typechain";
 import "solidity-coverage";
+import "@nomiclabs/hardhat-web3";
 
 require('dotenv').config()
 
