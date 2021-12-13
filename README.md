@@ -26,6 +26,14 @@ npx hardhat run scripts/deploy.js --network localhost
 
 ### for aurora testnet
 
+faucet: https://testnet.aurora.dev/faucet
+
+site: https://aurora.dev/
+
+chain info: https://doc.aurora.dev/develop/networks
+
+explorer: https://explorer.mainnet.aurora.dev/
+
 compile the contracts & generate types
 
 ```

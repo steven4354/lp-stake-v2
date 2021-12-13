@@ -35,6 +35,15 @@ export default {
       accounts: {
         mnemonic: EVM_WALLET_TESTNET_MNEMOMIC,
       },
+    },
+    mainnetAurora: {
+      url: "https://mainnet.aurora.dev",
+      chainId: 1313161554,
+      gasPrice: 0,
+      timeout: 30000,
+      accounts: {
+        mnemonic: EVM_WALLET_TESTNET_MNEMOMIC,
+      },
     }
   },
   solidity: {

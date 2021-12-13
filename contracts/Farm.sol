@@ -63,16 +63,30 @@ contract Farm is Ownable {
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
+    address public triFactory;
+    address public triRouter;
+    address public triMasterchefStaking;
+    address public triErc20;
+
     constructor(
-        IERC20 _erc20
+        IERC20 _erc20,
+        address _triFactory,
+        address _triRouter,
+        address _triMasterchefStaking,
+        address _triErc20
         // uint256 _rewardPerBlock, 
         // uint256 _startBlock
     ) public {
         erc20 = _erc20;
+        triFactory = _triFactory;
+        triRouter = _triRouter;
+        triMasterchefStaking = _triMasterchefStaking;
+        triErc20 = _triErc20;
+
         // TODO: remove these unused variables
-        rewardPerBlock = 0; // _rewardPerBlock;
-        startBlock = 0; // _startBlock;
-        endBlock = 0; // _startBlock;
+        // rewardPerBlock = _rewardPerBlock;
+        // startBlock = _startBlock;
+        // endBlock = _startBlock;
     }
 
     // Number of LP pools
