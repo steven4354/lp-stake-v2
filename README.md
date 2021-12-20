@@ -37,6 +37,7 @@ explorer: https://explorer.mainnet.aurora.dev/
 compile the contracts & generate types
 
 ```
+npm install
 npm run compile
 ```
 

@@ -38,6 +38,7 @@ contract Farm is Ownable {
         uint256 allocPoint;         // How many allocation points assigned to this pool. ERC20s to distribute per block.
         uint256 lastRewardBlock;    // Last block number that ERC20s distribution occurs.
         uint256 accERC20PerShare;   // Accumulated ERC20s per share, times 1e36.
+        address rewardContract;
     }
 
     // Address of the ERC20 Token contract.
@@ -104,7 +105,7 @@ contract Farm is Ownable {
 
     // Add a new lp to the pool. Can only be called by the owner.
     // DO NOT add the same LP token more than once. Rewards will be messed up if you do.
-    function add(uint256 _allocPoint, IERC20 _lpToken, bool _withUpdate) public onlyOwner {
+    function add(uint256 _allocPoint, IERC20 _lpToken, bool _withUpdate, address _rewardContract) public onlyOwner {
         if (_withUpdate) {
             massUpdatePools();
         }
@@ -114,7 +115,8 @@ contract Farm is Ownable {
             lpToken: _lpToken,
             allocPoint: _allocPoint,
             lastRewardBlock: lastRewardBlock,
-            accERC20PerShare: 0
+            accERC20PerShare: 0,
+            rewardContract: _rewardContract
         }));
     }
 

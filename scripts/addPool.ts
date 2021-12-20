@@ -6,8 +6,16 @@ const hre = require("hardhat");
 
 const FARM_ADDR = "0x67Eb087427bDA66EeEA60b8c1948c776640DE761"
 const TRI_WNEAR_ETH_LP_ADDR = "0x63da4DB6Ef4e7C62168aB03982399F9588fCd198";
+const TRI_WNEAR_ETH_REWARD_ADDR = "0xC42C30aC6Cc15faC9bD938618BcaA1a1FaE8501d";
 const FIRST_POOL_PID = 0;
 const AMOUNT_TO_DEPOSIT = 0.1;
+
+const DEFAULT_DECIMALS = 18
+const TRI_FACTORY_ADDR = "0xc66F594268041dB60507F00703b152492fb176E7";
+const TRI_ROUTER_ADDR = "0x2CB45Edb4517d5947aFdE3BEAbF95A582506858B";
+const TRI_MASTERCHEF_STAKING_ADDR = "0xC9BdeEd33CD01541e1eeD10f90519d2C06Fe3feB";
+const TRI_ERC20_ADDR = "0xFa94348467f64D5A457F75F8bc40495D33c65aBB";
+const MOCK_TOKEN_MINT_AMT = 10000
 
 // https://ethereum.stackexchange.com/questions/115288/error-overflow-pasing-value-to-smart-contract-method
 // https://github.com/trisolaris-labs/trisolaris_core/blob/main/contracts/amm/UniswapV2ERC20.sol
@@ -24,13 +32,28 @@ async function main() {
 
   console.log("Deploying contracts with the account:", deployer.address);
 
+  const Reward = await hre.ethers.getContractFactory("ERC20Mock");
+  const reward = await Reward.deploy("Test Token", "TEST", DEFAULT_DECIMALS, MOCK_TOKEN_MINT_AMT);
+
   const Farm = await hre.ethers.getContractFactory("Farm");
-  const farm = await Farm.attach(
-    FARM_ADDR
-  )
+  const farm = await Farm.deploy(
+    reward.address,
+    TRI_FACTORY_ADDR,
+    TRI_ROUTER_ADDR,
+    TRI_MASTERCHEF_STAKING_ADDR,
+    TRI_ERC20_ADDR,
+  );
+
+  // const Farm = await hre.ethers.getContractFactory("Farm");
+  // const farm = await Farm.attach(
+  //   FARM_ADDR
+  // )
+
+  await reward.deployed();
+  await farm.deployed();
 
   // add the lp contract (allocPoint is random number and unused)
-  // await farm.add(1, TRI_WNEAR_ETH_LP_ADDR, true)
+  await farm.add(1, TRI_WNEAR_ETH_LP_ADDR, true, TRI_WNEAR_ETH_REWARD_ADDR)
   const numberOfPools = await farm.poolLength()
   const poolInfo = await farm.poolInfo(FIRST_POOL_PID)
 
