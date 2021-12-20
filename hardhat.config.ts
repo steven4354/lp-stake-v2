@@ -3,6 +3,7 @@ import "@nomiclabs/hardhat-ethers";
 import "hardhat-typechain";
 import "solidity-coverage";
 import "@nomiclabs/hardhat-web3";
+import '@symblox/hardhat-abi-gen';
 
 require('dotenv').config()
 
