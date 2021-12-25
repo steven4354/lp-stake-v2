@@ -7,6 +7,8 @@ import "@openzeppelin/contracts/utils/EnumerableSet.sol";
 import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
+import "./interfaces/IMasterChef.sol";
+
 // Farm distributes the ERC20 rewards based on staked LP to each user.
 //
 // Cloned from https://github.com/SashimiProject/sashimiswap/blob/master/contracts/MasterChef.sol
@@ -38,7 +40,8 @@ contract Farm is Ownable {
         uint256 allocPoint;         // How many allocation points assigned to this pool. ERC20s to distribute per block.
         uint256 lastRewardBlock;    // Last block number that ERC20s distribution occurs.
         uint256 accERC20PerShare;   // Accumulated ERC20s per share, times 1e36.
-        address rewardContract;
+        IMasterChef rewardContract;
+        uint256 rewardPoolId;
     }
 
     // Address of the ERC20 Token contract.
@@ -64,25 +67,12 @@ contract Farm is Ownable {
     event Withdraw(address indexed user, uint256 indexed pid, uint256 amount);
     event EmergencyWithdraw(address indexed user, uint256 indexed pid, uint256 amount);
 
-    address public triFactory;
-    address public triRouter;
-    address public triMasterchefStaking;
-    address public triErc20;
-
     constructor(
-        IERC20 _erc20,
-        address _triFactory,
-        address _triRouter,
-        address _triMasterchefStaking,
-        address _triErc20
+        IERC20 _erc20
         // uint256 _rewardPerBlock, 
         // uint256 _startBlock
     ) public {
         erc20 = _erc20;
-        triFactory = _triFactory;
-        triRouter = _triRouter;
-        triMasterchefStaking = _triMasterchefStaking;
-        triErc20 = _triErc20;
 
         // TODO: remove these unused variables
         // rewardPerBlock = _rewardPerBlock;
@@ -105,18 +95,27 @@ contract Farm is Ownable {
 
     // Add a new lp to the pool. Can only be called by the owner.
     // DO NOT add the same LP token more than once. Rewards will be messed up if you do.
-    function add(uint256 _allocPoint, IERC20 _lpToken, bool _withUpdate, address _rewardContract) public onlyOwner {
+    // _rewardContract is the address of the MasterChef pool (lp staking) on trisolaris, _rewardPoolId is the pool id of it, see /scripts/trisolarisTesting.ts for details
+    function add(
+        uint256 _allocPoint, 
+        IERC20 _lpToken, 
+        bool _withUpdate, 
+        address _rewardContract, 
+        uint256 _rewardPoolId
+    ) public onlyOwner {
         if (_withUpdate) {
             massUpdatePools();
         }
         uint256 lastRewardBlock = block.number > startBlock ? block.number : startBlock;
         totalAllocPoint = totalAllocPoint.add(_allocPoint);
+
         poolInfo.push(PoolInfo({
             lpToken: _lpToken,
             allocPoint: _allocPoint,
             lastRewardBlock: lastRewardBlock,
             accERC20PerShare: 0,
-            rewardContract: _rewardContract
+            rewardContract: IMasterChef(_rewardContract),
+            rewardPoolId: _rewardPoolId
         }));
     }
 
@@ -201,6 +200,12 @@ contract Farm is Ownable {
             erc20Transfer(msg.sender, pendingAmount);
         }
         pool.lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
+
+        // approve lp token to deposit to trisolaris reward
+        pool.lpToken.approve(address(pool.rewardContract), _amount);
+
+        pool.rewardContract.deposit(pool.rewardPoolId, _amount);
+
         user.amount = user.amount.add(_amount);
         user.rewardDebt = user.amount.mul(pool.accERC20PerShare).div(1e36);
         emit Deposit(msg.sender, _pid, _amount);
@@ -216,6 +221,10 @@ contract Farm is Ownable {
         erc20Transfer(msg.sender, pendingAmount);
         user.amount = user.amount.sub(_amount);
         user.rewardDebt = user.amount.mul(pool.accERC20PerShare).div(1e36);
+
+        // remove from tri master chef
+        pool.rewardContract.withdraw(pool.rewardPoolId, _amount);
+
         pool.lpToken.safeTransfer(address(msg.sender), _amount);
         emit Withdraw(msg.sender, _pid, _amount);
     }
