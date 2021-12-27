@@ -1,0 +1,1 @@
+generated from https://github.com/trisolaris-labs/trisolaris_core using `import '@symblox/hardhat-abi-gen';`
