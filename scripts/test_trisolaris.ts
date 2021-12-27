@@ -4,7 +4,9 @@
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 
-import IMasterChefV1Abi = require("../abi/contracts/interfaces/IMasterChef.sol/IMasterChef.json")
+// swapped to the full abi
+// import IMasterChefV1Abi = require("../abi/contracts/interfaces/IMasterChef.sol/IMasterChef.json")
+import IMasterChefV1Abi = require("../trisolaris_abi/contracts/rewards/MasterChef.sol/MasterChef.json")
 import { amountToUint256 } from "../utils/conversion";
 import { TRI_MASTERCHEF_ADDR, TRI_WNEAR_ETH_LP_ADDR, WETH_NEAR_LP_POOL_ID } from "../utils/trisolaris";
 
@@ -50,6 +52,10 @@ async function main() {
 
   const pendingTri = await triMasterChef.pendingTri(WETH_NEAR_LP_POOL_ID, accounts[0])
   console.log("STEVENDEBUG pendingTri ", pendingTri);
+
+  const userInfo = await triMasterChef.userInfo(0, accounts[0])
+  console.log("STEVENDEBUG userInfo ", userInfo);
+  
   
 }
 
