@@ -55,21 +55,21 @@ contract SoloFarm is Ownable {
     rewardPoolId = _rewardPoolId;
   }
 
-  function trisolarisReward() public returns (uint256) {
+  function trisolarisReward() public view returns (uint256) {
     uint256 amount = rewardContract.pendingTri(0, address(this));
     return amount;
   }
 
-  function trisolarisRewardV2(uint256 _pid, address _user) public returns (uint256) {
+  function trisolarisRewardV2(uint256 _pid, address _user) public view returns (uint256) {
     uint256 amount = rewardContract.pendingTri(_pid, _user);
     return amount;
   }
 
-  function myAddress() public returns (address) {
+  function myAddress() public view returns (address) {
     return address(this);
   }
 
-  function testUintV1() public returns (uint256) {
+  function testUintV1() public view returns (uint256) {
     return 5;
   }
 

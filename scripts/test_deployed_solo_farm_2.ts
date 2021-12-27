@@ -10,7 +10,7 @@ import SoloFarmAbi = require("../abi/contracts/SoloFarm.sol/SoloFarm.json")
 import IMasterChefV1Abi = require("../abi/contracts/interfaces/IMasterChef.sol/IMasterChef.json")
 import { TRI_MASTERCHEF_ADDR, WETH_NEAR_LP_POOL_ID } from "../utils/trisolaris";
 
-const DEPLOYED_SOLO_FARM_ADDR = "0x36d239cd880B4B0b5300a035c5fF75ee3578F05B"
+const DEPLOYED_SOLO_FARM_ADDR = "0xDF3cE1eCc0EA7f6d0e317330eaB9E234E0bcaA08"
 
 async function main() {
   const [deployer, governance] = await hre.ethers.getSigners();
