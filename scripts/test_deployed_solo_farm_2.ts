@@ -10,10 +10,12 @@ import SoloFarmAbi = require("../abi/contracts/SoloFarm.sol/SoloFarm.json")
 import IMasterChefV1Abi = require("../abi/contracts/interfaces/IMasterChef.sol/IMasterChef.json")
 import { TRI_MASTERCHEF_ADDR, WETH_NEAR_LP_POOL_ID } from "../utils/trisolaris";
 
-const DEPLOYED_SOLO_FARM_ADDR = "0x4CbA1805E52e7263267B5146270Dc6f1Eb202219"
+const DEPLOYED_SOLO_FARM_ADDR = "0x36d239cd880B4B0b5300a035c5fF75ee3578F05B"
 
 async function main() {
   const [deployer, governance] = await hre.ethers.getSigners();
+
+  const accounts = await hre.web3.eth.getAccounts()
 
   const network = await hre.ethers.provider.getNetwork();
 
@@ -23,8 +25,8 @@ async function main() {
 
   let farm = new hre.ethers.Contract(DEPLOYED_SOLO_FARM_ADDR, SoloFarmAbi, hre.ethers.provider.getSigner());
   
-  const trisolaris_reward = await farm.trisolarisReward()
-  console.log("STEVENDEBUG trisolaris_reward amount", trisolaris_reward);
+  let farm_pool_id = await farm.rewardPoolId()
+  console.log("STEVENDEBUG farm_pool_id ", farm_pool_id);
 
   // const signer = await hre.ethers.provider.getSigner()
   // console.log("STEVENDEBUG signer ", signer);
@@ -35,8 +37,20 @@ async function main() {
   // console.log("STEVENDEBUG user_trisolaris_reward amount", user_trisolaris_reward);
 
   let triMasterChef = new hre.ethers.Contract(TRI_MASTERCHEF_ADDR, IMasterChefV1Abi, hre.ethers.provider.getSigner())
-  const tri_masterchef_rewards = triMasterChef.pendingTri(WETH_NEAR_LP_POOL_ID, DEPLOYED_SOLO_FARM_ADDR)
+  const tri_masterchef_rewards = await triMasterChef.pendingTri(WETH_NEAR_LP_POOL_ID, DEPLOYED_SOLO_FARM_ADDR)
   console.log("STEVENDEBUG tri_masterchef_rewards amount", tri_masterchef_rewards);
+
+  const trisolaris_reward = await farm.trisolarisReward()
+  console.log("STEVENDEBUG trisolaris_reward amount", trisolaris_reward);
+
+  const my_address = await farm.myAddress()
+  console.log("STEVENDEBUG my_address ", my_address);
+  
+  const test_uint_v1_val = await farm.testUintV1();
+  console.log("STEVENDEBUG test_uint_v1_val ", test_uint_v1_val);
+  
+  const test_uint_v2_val = await farm.testUintV2();
+  console.log("STEVENDEBUG test_uint_v2_val ", test_uint_v2_val);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

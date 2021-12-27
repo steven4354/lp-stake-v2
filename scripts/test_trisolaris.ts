@@ -46,7 +46,11 @@ async function main() {
 
   // await triMasterChef.withdraw(WETH_NEAR_LP_POOL_ID, deposit_amount)
 
-  await triMasterChef.harvest(WETH_NEAR_LP_POOL_ID)
+  // await triMasterChef.harvest(WETH_NEAR_LP_POOL_ID)
+
+  const pendingTri = await triMasterChef.pendingTri(WETH_NEAR_LP_POOL_ID, accounts[0])
+  console.log("STEVENDEBUG pendingTri ", pendingTri);
+  
 }
 
 // We recommend this pattern to be able to use async/await everywhere

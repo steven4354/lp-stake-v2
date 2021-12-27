@@ -26,7 +26,8 @@ contract SoloFarm is Ownable {
 
   // trisolaris reward contract infos
   IMasterChef rewardContract;
-  uint256 rewardPoolId;
+  address rewardContractAddress;
+  uint256 public rewardPoolId;
 
   // Info of each user that stakes LP tokens.
   mapping (uint256 => mapping (address => UserInfo)) public userInfo;
@@ -50,11 +51,30 @@ contract SoloFarm is Ownable {
     erc20 = _nativeTokenReward;
     lpToken = _lpToken;
     rewardContract = IMasterChef(_rewardContract);
+    rewardContractAddress = _rewardContract;
     rewardPoolId = _rewardPoolId;
   }
 
   function trisolarisReward() public returns (uint256) {
-    return rewardContract.pendingTri(rewardPoolId, address(this));
+    uint256 amount = rewardContract.pendingTri(0, address(this));
+    return amount;
+  }
+
+  function trisolarisRewardV2(uint256 _pid, address _user) public returns (uint256) {
+    uint256 amount = rewardContract.pendingTri(_pid, _user);
+    return amount;
+  }
+
+  function myAddress() public returns (address) {
+    return address(this);
+  }
+
+  function testUintV1() public returns (uint256) {
+    return 5;
+  }
+
+  function testUintV2() public view returns (uint256) {
+    return 5;
   }
 
   // Fund the farm, increase the end block
