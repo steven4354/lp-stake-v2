@@ -8,6 +8,8 @@ import { TRI_MASTERCHEF_ADDR, TRI_WNEAR_ETH_LP_ADDR, WETH_NEAR_LP_POOL_ID } from
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 
+const QUICK_ERC20_ABI = ["function approve(address _spender, uint _value) public returns (bool success)"]
+
 async function main() {
   const [deployer, governance] = await hre.ethers.getSigners();
 
@@ -31,6 +33,10 @@ async function main() {
   await reward.deployed();
   await farm.deployed();
 
+  // const amountToFund = amountToUint256(1000000)
+  await reward.approve(farm.address, 1000000)
+  await farm.fund(1000000)
+
   const amountToDeposit = amountToUint256(0.1)
 
   console.log("STEVENDEBUG farm address ", farm.address);
@@ -40,12 +46,14 @@ async function main() {
   let contract = new hre.ethers.Contract(TRI_WNEAR_ETH_LP_ADDR, abi, hre.ethers.provider.getSigner())
   await contract.approve(farm.address, amountToDeposit)
 
-  await farm.deposit(0, amountToDeposit)
-  const amountDeposited = await farm.deposited(0, deployer.address)
+  console.log("STEVENDEBUG contact approved");
+
+  await farm.deposit(amountToDeposit)
+  const amountDeposited = await farm.deposited(deployer.address)
 
   console.log(`Amount deposited should be ${amountToDeposit}: `, amountDeposited);
 
-  // await farm.withdraw(0, amountToDeposit)
+  // await farm.withdraw(amountToDeposit)
   // const amountDepositedNew = await farm.deposited(0, deployer.address)
 
   // console.log(`Amount withdrawn should be ${amountToDeposit}: `, amountDepositedNew);

@@ -30,7 +30,7 @@ contract SoloFarm is Ownable {
   uint256 public rewardPoolId;
 
   // Info of each user that stakes LP tokens.
-  mapping (uint256 => mapping (address => UserInfo)) public userInfo;
+  mapping (address => UserInfo) public userInfo;
 
   // The total amount of ERC20 that's paid out as reward.
   uint256 public paidOut = 0;
@@ -83,14 +83,14 @@ contract SoloFarm is Ownable {
   }
 
   // View function to see deposited LP for a user.
-  function deposited(uint256 _pid, address _user) external view returns (uint256) {
-    UserInfo storage user = userInfo[_pid][_user];
+  function deposited(address _user) external view returns (uint256) {
+    UserInfo storage user = userInfo[_user];
     return user.amount;
   }
 
   // Deposit LP tokens to Farm for ERC20 allocation.
-  function deposit(uint256 _pid, uint256 _amount) public {
-    UserInfo storage user = userInfo[_pid][msg.sender];
+  function deposit(uint256 _amount) public {
+    UserInfo storage user = userInfo[msg.sender];
 
     // removing the old rewards
     // if (user.amount > 0) {
@@ -114,8 +114,8 @@ contract SoloFarm is Ownable {
   }
 
   // Withdraw LP tokens from Farm.
-  function withdraw(uint256 _pid, uint256 _amount) public {
-    UserInfo storage user = userInfo[_pid][msg.sender];
+  function withdraw(uint256 _amount) public {
+    UserInfo storage user = userInfo[msg.sender];
     require(user.amount >= _amount, "withdraw: can't withdraw more than deposit");
 
     // removing the old rewards logic
@@ -140,11 +140,4 @@ contract SoloFarm is Ownable {
     erc20.transfer(_to, _amount);
     paidOut += _amount;
   }
-
-  // function getTotalRewardsPerWasset(address _user) {
-  //   if (_user) {
-  //     return totalRewardsPerWasset_specificToUser[_user]
-  //   }
-  //   return totalRewardsPerWasset
-  // }
 }
