@@ -90,6 +90,11 @@ async function main() {
   const test_uint_v2_val = await farm.testUintV2();
   console.log("STEVENDEBUG test_uint_v2_val ", test_uint_v2_val);
   
+  const test_total_lp_balance = await farm.totalLPBalance();
+  console.log("STEVENDEBUG test_total_lp_balance ", test_total_lp_balance);
+
+  const test_actual_total_lp_balance = await farm.totalLPBalanceV2();
+  console.log("STEVENDEBUG test_actual_total_lp_balance ", test_actual_total_lp_balance);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
