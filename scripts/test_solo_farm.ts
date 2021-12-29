@@ -4,54 +4,74 @@
 
 import { amountToUint256 } from "../utils/conversion";
 import { TRI_MASTERCHEF_ADDR, TRI_WNEAR_ETH_LP_ADDR, WETH_NEAR_LP_POOL_ID } from "../utils/trisolaris";
+import SoloFarmAbi from "../abi/contracts/SoloFarm.sol/SoloFarm.json"
+import RewardAbi from "../abi/contracts/ERC20Mock.sol/ERC20Mock.json"
+import LPAbi from "../trisolaris_abi/contracts/amm/UniswapV2ERC20.sol/UniswapV2ERC20.json"
+import { address } from '../test/utils/ethereum';
 
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 
-const QUICK_ERC20_ABI = ["function approve(address _spender, uint _value) public returns (bool success)"]
+const FARM_ADDR = "0x512e4bfCfEd84b388aE8d18fD5308FcFfC4794FE"
+const REWARD_ADDR = "0x837bFfE0E776BC16f3698f5B151136bEc8b56ccB"
+const DO_NEW_FUNDING = false;
 
 async function main() {
   const [deployer, governance] = await hre.ethers.getSigners();
 
-  const network = await hre.ethers.provider.getNetwork();
-
-  console.log("Network ", network);
-
+  // same as deployer
   console.log("Deploying contracts with the account:", deployer.address);
 
-  const Reward = await hre.ethers.getContractFactory("ERC20Mock");
-  const reward = await Reward.deploy("Test Token", "TEST", 18, 1000000);
+  let Reward;
+  let reward;
+  
+  if (REWARD_ADDR) {
+    reward = new hre.ethers.Contract(REWARD_ADDR, RewardAbi, hre.ethers.provider.getSigner())
+  } else {
+    Reward = await hre.ethers.getContractFactory("ERC20Mock");
+    reward = await Reward.deploy("Test Token", "TEST", 18, "1000000");
+    await reward.deployed();
+  }
+  
+  console.log("STEVENDEBUG reward address ", reward.address);
 
-  const Farm = await hre.ethers.getContractFactory("SoloFarm");
-  const farm = await Farm.deploy(
-    reward.address,
-    TRI_WNEAR_ETH_LP_ADDR,
-    TRI_MASTERCHEF_ADDR,
-    WETH_NEAR_LP_POOL_ID
-  );
+  let Farm;
+  let farm;
 
-  await reward.deployed();
-  await farm.deployed();
-
-  // const amountToFund = amountToUint256(1000000)
-  await reward.approve(farm.address, 1000000)
-  await farm.fund(1000000)
-
-  const amountToDeposit = amountToUint256(0.1)
+  if (FARM_ADDR) {
+    farm = new hre.ethers.Contract(FARM_ADDR, SoloFarmAbi, hre.ethers.provider.getSigner())
+  } else {
+    Farm = await hre.ethers.getContractFactory("SoloFarm");
+    farm = await Farm.deploy(
+      reward.address,
+      TRI_WNEAR_ETH_LP_ADDR,
+      TRI_MASTERCHEF_ADDR,
+      WETH_NEAR_LP_POOL_ID
+    );
+    await farm.deployed();
+  }
 
   console.log("STEVENDEBUG farm address ", farm.address);
+
+  if (DO_NEW_FUNDING) {
+    await reward.approve(farm.address, "1000000")
+    console.log("STEVENDEBUG reward approved");
+    
+    await farm.fund("1000000")
+    console.log("STEVENDEBUG funding secured");
+  }  
   
   // approve deposit of lp into Farm.sol
-  let abi = ["function approve(address _spender, uint _value) public returns (bool success)"]
-  let contract = new hre.ethers.Contract(TRI_WNEAR_ETH_LP_ADDR, abi, hre.ethers.provider.getSigner())
+  const amountToDeposit = amountToUint256(0.1);
+  let contract = new hre.ethers.Contract(TRI_WNEAR_ETH_LP_ADDR, LPAbi, hre.ethers.provider.getSigner())
   await contract.approve(farm.address, amountToDeposit)
-
   console.log("STEVENDEBUG contact approved");
 
   await farm.deposit(amountToDeposit)
+  console.log("deposited");
+  
   const amountDeposited = await farm.deposited(deployer.address)
-
-  console.log(`Amount deposited should be ${amountToDeposit}: `, amountDeposited);
+  console.log(`Amount deposited should be ++${amountToDeposit}: `, amountDeposited);
 
   // await farm.withdraw(amountToDeposit)
   // const amountDepositedNew = await farm.deposited(0, deployer.address)

@@ -99,8 +99,8 @@ contract SoloFarm is Ownable {
     // }
 
     // new reward logic
-    totalRewardsPerWasset = trisolarisReward();
-    totalRewardsPerWasset_specificToUser[msg.sender] = trisolarisReward();
+    // totalRewardsPerWasset = trisolarisReward();
+    // totalRewardsPerWasset_specificToUser[msg.sender] = trisolarisReward();
 
     lpToken.safeTransferFrom(address(msg.sender), address(this), _amount);
 
@@ -123,8 +123,8 @@ contract SoloFarm is Ownable {
     // erc20Transfer(msg.sender, pendingAmount);
 
     // new reward logic
-    totalRewardsPerWasset = trisolarisReward();
-    totalRewardsPerWasset_specificToUser[msg.sender] = trisolarisReward();
+    // totalRewardsPerWasset = trisolarisReward();
+    // totalRewardsPerWasset_specificToUser[msg.sender] = trisolarisReward();
 
     user.amount = user.amount.sub(_amount);
 
