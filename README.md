@@ -1,6 +1,6 @@
 # lp-stake-v2
 
-stake lp tokens and earn erc20 tokens as reward!
+stake (trisolaris) lp tokens and earn erc20 tokens as reward!
 
 ## setup 
 
