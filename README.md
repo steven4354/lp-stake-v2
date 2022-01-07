@@ -37,6 +37,7 @@ explorer: https://explorer.mainnet.aurora.dev/
 compile the contracts & generate types
 
 ```
+npm install
 npm run compile
 ```
 
@@ -64,3 +65,9 @@ https://github.com/trisolaris-labs/trisolaris_core/blob/main/contracts/amm/Unisw
 ```
 npx hardhat run scripts/addPool.ts --network mainnetAurora
 ```
+
+## troubleshooting
+
+- nonce error
+
+follow the steps here to reset the account: https://dev.to/nmassi/comment/1dafo

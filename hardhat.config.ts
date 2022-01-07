@@ -3,6 +3,7 @@ import "@nomiclabs/hardhat-ethers";
 import "hardhat-typechain";
 import "solidity-coverage";
 import "@nomiclabs/hardhat-web3";
+import '@symblox/hardhat-abi-gen';
 
 require('dotenv').config()
 
@@ -41,7 +42,7 @@ export default {
       url: "https://mainnet.aurora.dev",
       chainId: 1313161554,
       gasPrice: 0,
-      timeout: 30000,
+      timeout: 300000000,
       accounts: {
         mnemonic: EVM_WALLET_TESTNET_MNEMOMIC,
       },
