@@ -59,13 +59,7 @@ contract SoloFarm is Ownable {
   }
 
   function trisolarisReward() public view returns (uint256) {
-    uint256 amount = rewardContract.pendingTri(0, address(this));
-    return amount;
-  }
-
-  function trisolarisRewardV2(uint256 _pid, address _user) public view returns (uint256) {
-    uint256 amount = rewardContract.pendingTri(_pid, _user);
-    return amount;
+    return IERC20(triToken).balanceOf(address(this));
   }
 
   // Fund the farm

@@ -31,9 +31,6 @@ async function main() {
   const trisolaris_reward = await farm.trisolarisReward()
   console.log("STEVENDEBUG trisolaris_reward amount", trisolaris_reward);
 
-  const trisolaris_reward_v2 = await farm.trisolarisRewardV2(0, accounts[0])
-  console.log("STEVENDEBUG trisolaris_reward_v2 ", trisolaris_reward_v2)
-
   // const signer = await hre.ethers.provider.getSigner()
   // console.log("STEVENDEBUG signer ", signer);
 
