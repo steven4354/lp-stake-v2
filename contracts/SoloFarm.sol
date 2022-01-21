@@ -61,6 +61,10 @@ contract SoloFarm is Ownable {
     rewardPoolId = _rewardPoolId;
   }
 
+  function getUsersCount() public view returns (uint256) {
+    return users.length;
+  }
+
   function trisolarisReward() public view returns (uint256) {
     return IERC20(triToken).balanceOf(address(this));
   }

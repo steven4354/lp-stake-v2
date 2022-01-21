@@ -47,6 +47,14 @@ deploy the contracts to testnet
 npx hardhat run scripts/deploy.js --network testnetAurora
 ```
 
+### generate abis for frontend
+
+```
+npm run compile
+```
+
+then, take abis from abi folder and place into the /abi folder in the frontend repo
+
 ## testing
 
 ### using test files
