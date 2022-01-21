@@ -28,4 +28,6 @@ interface IMasterChef {
 
     function triPerBlock() external view returns (uint256);    
     function pendingTri(uint256 _pid, address _user) external view returns (uint256);
+    // added from contract
+    function userInfo(uint256 _pid, address _user) external view returns (IMasterChef.UserInfo memory);
 }

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.6.12;
+pragma experimental ABIEncoderV2;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/SafeERC20.sol";
@@ -62,6 +63,32 @@ contract SoloFarm is Ownable {
 
   function trisolarisReward() public view returns (uint256) {
     return IERC20(triToken).balanceOf(address(this));
+  }
+
+  function trisolarisPendingReward() public view returns (uint256) {
+    return rewardContract.pendingTri(0, address(this));
+  }
+
+  function totalRewardsPerWassetByUser(address _user) public view returns (uint256) {
+    return totalRewardsPerWasset_specificToUser[_user];
+  }
+
+  function totalLPBalance() public view returns (IMasterChef.UserInfo memory) {
+    // wrong master chef holds the tokens none is held here in SoloFarm.sol
+    // return lpToken.balanceOf(address(this));
+    return rewardContract.userInfo(rewardPoolId, address(this));
+  }
+
+  function totalLPBalanceV2() public view returns (uint256) {
+    // wrong master chef holds the tokens none is held here in SoloFarm.sol
+    // return lpToken.balanceOf(address(this));
+    return rewardContract.userInfo(rewardPoolId, address(this)).amount;
+  }
+
+  function calcRewardsPerWasset() public view returns (uint256) {
+    // no decimals in solidity so default to a using a decimal place of 10^18
+    uint256 totalRewards = trisolarisPendingReward() + trisolarisReward();
+    return (totalRewards * (10**18)) / totalLPBalanceV2() ;
   }
 
   // Fund the farm
