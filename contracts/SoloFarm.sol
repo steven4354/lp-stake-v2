@@ -32,6 +32,8 @@ contract SoloFarm is Ownable {
   // Info of each user that stakes LP tokens.
   mapping (address => UserInfo) public userInfo;
 
+  address triToken = 0xFa94348467f64D5A457F75F8bc40495D33c65aBB;  
+
   // The total amount of ERC20 that's paid out as reward.
   uint256 public paidOut = 0;
 
