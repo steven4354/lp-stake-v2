@@ -80,16 +80,6 @@ async function main() {
 
   const trisolaris_reward = await farm.trisolarisReward()
   console.log("STEVENDEBUG trisolaris_reward amount", trisolaris_reward);
-
-  const my_address = await farm.myAddress()
-  console.log("STEVENDEBUG my_address ", my_address);
-  
-  const test_uint_v1_val = await farm.testUintV1();
-  console.log("STEVENDEBUG test_uint_v1_val ", test_uint_v1_val);
-  
-  const test_uint_v2_val = await farm.testUintV2();
-  console.log("STEVENDEBUG test_uint_v2_val ", test_uint_v2_val);
-  
 }
 
 // We recommend this pattern to be able to use async/await everywhere

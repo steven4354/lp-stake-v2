@@ -41,6 +41,9 @@ contract SoloFarm is Ownable {
 
   event Deposit(address indexed user, uint256 amount);
   event Withdraw(address indexed user, uint256 amount);
+
+  // records addresses of all depositors/users, for calculating total deposits
+  address[] public users;
     
   constructor(
     IERC20 _nativeTokenReward,
@@ -65,19 +68,7 @@ contract SoloFarm is Ownable {
     return amount;
   }
 
-  function myAddress() public view returns (address) {
-    return address(this);
-  }
-
-  function testUintV1() public view returns (uint256) {
-    return 5;
-  }
-
-  function testUintV2() public view returns (uint256) {
-    return 5;
-  }
-
-  // Fund the farm, increase the end block
+  // Fund the farm
   function fund(uint256 _amount) public {
     erc20.safeTransferFrom(address(msg.sender), address(this), _amount);
   }
@@ -91,6 +82,9 @@ contract SoloFarm is Ownable {
   // Deposit LP tokens to Farm for ERC20 allocation.
   function deposit(uint256 _amount) public {
     UserInfo storage user = userInfo[msg.sender];
+
+    // record a new user for calc total deposits
+    users.push(msg.sender);
 
     // removing the old rewards
     // if (user.amount > 0) {

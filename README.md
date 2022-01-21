@@ -1,6 +1,6 @@
 # lp-stake-v2
 
-stake (trisolaris) lp tokens and earn erc20 tokens as reward!
+stake (trisolaris) lp tokens and earn erc20 governance tokens as reward!
 
 ## setup 
 
@@ -24,7 +24,7 @@ deploy the contracts to local blockchain
 npx hardhat run scripts/deploy.js --network localhost
 ```
 
-### for aurora testnet
+### for aurora testnet (used mainnet instead due to free gas)
 
 faucet: https://testnet.aurora.dev/faucet
 
@@ -41,13 +41,15 @@ npm install
 npm run compile
 ```
 
-deploy the contracts to local blockchain
+deploy the contracts to testnet
 
 ```
 npx hardhat run scripts/deploy.js --network testnetAurora
 ```
 
-## smart contracts testing
+## testing
+
+### using test files
 
 to run tests use: 
 
@@ -57,13 +59,11 @@ npm run test
 
 the tests are located in the /test folder
 
-## notes
-
-trisolaris LP tokens: 
-https://github.com/trisolaris-labs/trisolaris_core/blob/main/contracts/amm/UniswapV2ERC20.sol
+### deploying and testing
 
 ```
-npx hardhat run scripts/addPool.ts --network mainnetAurora
+npx hardhat run scripts/test_solo_farm.ts --network mainnetAurora
+npx hardhat run scripts/test_deployed_solo_farm_2.ts --network mainnetAurora
 ```
 
 ## troubleshooting
@@ -71,3 +71,8 @@ npx hardhat run scripts/addPool.ts --network mainnetAurora
 - nonce error
 
 follow the steps here to reset the account: https://dev.to/nmassi/comment/1dafo
+
+## references
+
+trisolaris LP tokens: 
+https://github.com/trisolaris-labs/trisolaris_core/blob/main/contracts/amm/UniswapV2ERC20.sol
